@@ -8,6 +8,27 @@ import numpy as np
 VERMELHO_CLARO = '#FF6347'  # Tomato Red
 AZUL_ESCURO = '#00008B'     # Dark Blue
 
+# Plano de fundo
+st.markdown("""
+    <style>
+    body {
+        background: linear-gradient(to right, #fff0f0, #ffeaea);
+    }
+    div.stButton > button:first-child {
+        background-color: #FF6347;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px 20px;
+        border: none;
+    }
+    div.stButton > button:hover {
+        background-color: #e5533d;
+        color: white;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Estado da sessão
 if "resposta_correta" not in st.session_state:
     st.session_state.resposta_correta = None
@@ -52,8 +73,14 @@ posicoes = gerar_posicoes_ovais(checkpoints, centro=(0, 0), raio_x=10, raio_y=5)
 st.markdown(f"<h1 style='color:{VERMELHO_CLARO}'>🏎️ Jogo: Qual é o Caminho do Dijkstra?</h1>", unsafe_allow_html=True)
 st.markdown(f"<h3 style='color:{VERMELHO_CLARO}'>Escolha os checkpoints e tente adivinhar o caminho mais curto!</h3>", unsafe_allow_html=True)
 
-ponto_inicio = st.selectbox("Checkpoint de Partida", checkpoints)
-ponto_final = st.selectbox("Checkpoint de Chegada", checkpoints)
+st.markdown(f"<h4 style='color:{VERMELHO_CLARO}'>Escolha os checkpoints:</h4>", unsafe_allow_html=True)
+col_inicio, col_meio, col_fim = st.columns(3)
+with col_inicio:
+    ponto_inicio = st.selectbox("🏁 Partida", checkpoints)
+with col_meio:
+    ponto_intermediario = st.selectbox("🛑 Intermediário (opcional)", ["Nenhum"] + checkpoints)
+with col_fim:
+    ponto_final = st.selectbox("🏁 Chegada", checkpoints)
 
 # Mostra o grafo
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -74,22 +101,55 @@ ax.set_facecolor("#FFF8F8")
 ax.set_axis_off()
 st.pyplot(fig)
 
+# Sidebar com dica
+st.sidebar.markdown("""
+    <div style='background-color:#000000; padding:15px; border-radius:10px; box-shadow: 0 0 10px rgba(0,0,0,0.1)'>
+        <h3 style='color:#FF6347'>💡 Dica: Como funciona o Dijkstra?</h3>
+        <p style='color:white;'>O algoritmo calcula o <b>menor caminho</b> somando os pesos (valores) das conexões entre os checkpoints.</p>
+        <hr style="border:1px solid #FF6347">
+        <b style='color:white;'>Exemplo:</b><br>
+        <span style='color:white;'>- Checkpoint 1 ➡️ 3 (peso 1)<br>
+        - Checkpoint 3 ➡️ 4 (peso 1)<br>
+        - Checkpoint 4 ➡️ 5 (peso 2)<br>
+        Total = 1 + 1 + 2 = <b>4</b><br><br>
+        Escolha o caminho com <b>menor soma!</b></span>
+    </div>
+""", unsafe_allow_html=True)
+
 # Botão para desafio
-if st.button("Gerar Desafio"):
+if st.button("🎯 Gerar Desafio"):
     if ponto_inicio == ponto_final:
         st.warning("Escolha dois checkpoints diferentes!")
     else:
         try:
-            caminho_correto = nx.dijkstra_path(pista, ponto_inicio, ponto_final, weight='weight')
+            if ponto_intermediario != "Nenhum":
+                caminho1 = nx.dijkstra_path(pista, ponto_inicio, ponto_intermediario, weight='weight')
+                caminho2 = nx.dijkstra_path(pista, ponto_intermediario, ponto_final, weight='weight')
+                caminho_correto = caminho1[:-1] + caminho2
+            else:
+                caminho_correto = nx.dijkstra_path(pista, ponto_inicio, ponto_final, weight='weight')
+
+            peso_correto = sum(
+                pista[caminho_correto[i]][caminho_correto[i + 1]]["weight"]
+                for i in range(len(caminho_correto) - 1)
+            )
+
+            todos_os_caminhos = list(nx.all_simple_paths(pista, ponto_inicio, ponto_final, cutoff=10))
             alternativas_erradas = []
-            for _ in range(10):
-                caminho_falso = nx.shortest_path(pista, ponto_inicio, ponto_final)
-                if caminho_falso != caminho_correto:
-                    alternativas_erradas.append(caminho_falso)
+            for caminho in todos_os_caminhos:
+                if caminho != caminho_correto:
+                    peso = sum(
+                        pista[caminho[i]][caminho[i + 1]]["weight"]
+                        for i in range(len(caminho) - 1)
+                    )
+                    if peso > peso_correto:
+                        alternativas_erradas.append(caminho)
+
             if alternativas_erradas:
                 caminho_errado = random.choice(alternativas_erradas)
             else:
                 caminho_errado = caminho_correto[::-1]
+
             opcoes = [caminho_correto, caminho_errado]
             random.shuffle(opcoes)
             st.session_state.opcoes = opcoes
@@ -129,6 +189,6 @@ if "opcoes" in st.session_state and st.session_state.resposta_correta:
 
     if st.session_state.resposta_clicada is not None:
         if st.session_state.resposta_clicada == st.session_state.resposta_correta:
-            st.success("✅ Parabéns! Você acertou o caminho calculado com Dijkstra.")
+            st.success("🎉 Parabéns! Você acertou o caminho calculado com Dijkstra.", icon="✅")
         else:
-            st.error("❌ Opa! Esse não era o caminho com Dijkstra.")
+            st.error("🚫 Opa! Esse não era o caminho com Dijkstra.", icon="❌")
