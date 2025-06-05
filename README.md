@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/7753bae9-9dcf-45f4-89e1-9bb8bf6f906e)# Projeto Corrida Inteligente 
+# 🚀 Corrida Inteligente
 
 **Resumo:** Este projeto implementa um jogo interativo usando Streamlit que desafia o usuário a encontrar o caminho mais curto em um grafo (rede de checkpoints) utilizando o algoritmo de Dijkstra. O objetivo é testar e reforçar o entendimento sobre como esse algoritmo de busca de caminho funciona na prática..
 
