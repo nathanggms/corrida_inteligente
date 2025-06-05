@@ -14,8 +14,11 @@ O principal objetivo deste projeto é criar uma ferramenta educativa para a comp
 
 Python 3.x
 Streamlit: Para a construção da interface web interativa.
+
 NetworkX: Para a criação, manipulação e cálculo de caminhos em grafos (especificamente o algoritmo de Dijkstra).
+
 Matplotlib: Para a visualização e plotagem do grafo.
+
 Numpy: Utilizado na geração das posições ovais dos nós.
 
 ---
