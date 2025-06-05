@@ -26,10 +26,14 @@ Numpy: Utilizado na geração das posições ovais dos nós.
 ## 🗂️ Estrutura do Projeto
 
 
-📦 dijkstra-game
+📦 Corrida_Inteligente
+
 ├── app.py
+
 ├── README.md
+
 └── requirements.txt
+
 ---
 
 ### ✅ Rodando Localmente
