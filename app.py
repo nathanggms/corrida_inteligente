@@ -70,7 +70,7 @@ def gerar_posicoes_ovais(pontos, centro=(0, 0), raio_x=10, raio_y=5):
 posicoes = gerar_posicoes_ovais(checkpoints, centro=(0, 0), raio_x=10, raio_y=5)
 
 # Interface
-st.markdown(f"<h1 style='color:{VERMELHO_CLARO}'>🏎️ Jogo: Qual é o Caminho do Dijkstra?</h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='color:{VERMELHO_CLARO}'>🏎️ CORRIDA INTELIGENTE (DIJKSTRA)</h1>", unsafe_allow_html=True)
 st.markdown(f"<h3 style='color:{VERMELHO_CLARO}'>Escolha os checkpoints e tente adivinhar o caminho mais curto!</h3>", unsafe_allow_html=True)
 
 st.markdown(f"<h4 style='color:{VERMELHO_CLARO}'>Escolha os checkpoints:</h4>", unsafe_allow_html=True)
@@ -102,17 +102,12 @@ ax.set_axis_off()
 st.pyplot(fig)
 
 # Sidebar com dica
-st.sidebar.markdown("""
+st.sidebar.markdown(f"""
     <div style='background-color:#000000; padding:15px; border-radius:10px; box-shadow: 0 0 10px rgba(0,0,0,0.1)'>
-        <h3 style='color:#FF6347'>💡 Dica: Como funciona o Dijkstra?</h3>
-        <p style='color:white;'>O algoritmo calcula o <b>menor caminho</b> somando os pesos (valores) das conexões entre os checkpoints.</p>
-        <hr style="border:1px solid #FF6347">
-        <b style='color:white;'>Exemplo:</b><br>
-        <span style='color:white;'>- Checkpoint 1 ➡️ 3 (peso 1)<br>
-        - Checkpoint 3 ➡️ 4 (peso 1)<br>
-        - Checkpoint 4 ➡️ 5 (peso 2)<br>
-        Total = 1 + 1 + 2 = <b>4</b><br><br>
-        Escolha o caminho com <b>menor soma!</b></span>
+        <h3 style='color:{VERMELHO_CLARO}'>💡 Dica: Como funciona o Dijkstra?</h3>
+        <p style='color:white;'>Vá explorando os caminhos, some os números das setas com o total que você já gastou para chegar até ali. Se você achar um jeito mais barato de chegar num lugar que você já tinha chegado antes, atualize para o valor mais barato! Continue fazendo isso até o final.</p>
+        <hr style="border:1px solid {VERMELHO_CLARO}">
+        <p style='color:white;'><b>Lembre-se:</b> O segredo é ir atualizando os custos. Um caminho que parece ter um começo caro pode se tornar o mais barato no final, e um que começa barato pode levar a um desvio caro!</p>
     </div>
 """, unsafe_allow_html=True)
 
