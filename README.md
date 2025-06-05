@@ -37,12 +37,14 @@ Numpy: Utilizado na geração das posições ovais dos nós.
 1. Clone o repositório:
 
 git clone https://github.com/nathanggms/corrida_inteligente
+
 cd corrida_inteligente
 
 
 2. Crie o ambiente virtual e ative:
 
 python -m venv venv
+
 source venv/bin/activate  # ou venv\Scripts\activate no Windows
 
 
